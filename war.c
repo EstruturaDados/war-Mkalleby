@@ -96,3 +96,67 @@ int main() {
 
 // limparBufferEntrada():
 // Função utilitária para limpar o buffer de entrada do teclado (stdin), evitando problemas com leituras consecutivas de scanf e getchar.
+
+
+// Online C compiler to run C program online
+#include <stdio.h>
+#include <string.h>
+
+// criando struct
+typedef struct{
+    char nome[30];
+    char cor[10];
+    int tropas;
+} Territorio;
+
+//definindo constante para o tamanho máximo de territórios
+#define quantidade_territorios 5
+
+int main() {
+    //definindo vetor com base na struct e no tamaho máximo
+    Territorio territorio[quantidade_territorios];
+    printf("JOGO WAR\n");
+    
+    //percorrendo cada índice para cadastrar o territorio
+    for (int i = 0; i < quantidade_territorios; i++){
+        printf("\n");
+        printf("-----------Cadastre o %d° territorio-----------\n", i + 1);
+        printf("\n");
+        
+        //cadastrando com base no índice atual no laço
+        printf("Digite o nome do %d° território: ", i + 1);
+        fgets(territorio[i].nome, sizeof(territorio[i].nome), stdin);
+        printf("\n");
+        
+        printf("Digite a cor %d° do territorio: ", i + 1);
+        fgets(territorio[i].cor, sizeof(territorio[i].cor), stdin);
+        printf("\n");
+        
+        printf("Digite a quantidade de tropas do %d° territorio: ", i + 1);
+        scanf("%d", &territorio[i].tropas);
+        getchar();
+        
+        printf("\n");
+    }
+    printf("\n");
+    printf("-----------Lista de Territorios-----------\n");
+    printf("\n");
+    
+    //percorrendo cada índice cadastrado e printando na tela as informações
+    for (int j = 0; j < quantidade_territorios; j++){
+        printf("%d° Territorio: \n", j + 1);
+        printf("\n");
+        printf("Territorio: %s", territorio[j].nome);
+        printf("\n");
+        printf("Cor: %s", territorio[j].cor);
+        printf("\n");
+        printf("Quantidade de tropas: %d\n", territorio[j].tropas);
+        printf("\n");
+        printf("--------------------------------------");
+        printf("\n");
+    }
+    
+        printf("Encerrando o programa...");
+
+    return 0;
+}
