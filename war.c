@@ -98,9 +98,10 @@ int main() {
 // Função utilitária para limpar o buffer de entrada do teclado (stdin), evitando problemas com leituras consecutivas de scanf e getchar.
 
 
-// Online C compiler to run C program online
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 // criando struct
 typedef struct{
@@ -111,10 +112,41 @@ typedef struct{
 
 //definindo constante para o tamanho máximo de territórios
 #define quantidade_territorios 5
-
+void atacar (Territorio *atacante, Territorio *defensor){
+    srand(time(NULL));
+    
+    int dado_atacante = rand() % 20;
+    int dado_defensor = rand() % 20;
+    
+    if(dado_atacante > dado_defensor){
+        printf("O %s tirou %d no dado",atacante->nome, dado_atacante);
+        printf("\n");
+        printf("O %s tirou %d no dado", defensor->nome, dado_defensor);
+        printf("\n");
+        printf("O territorio atacante %s venceu e o territorio defensor %s perdeu 1 tropa\n", atacante->nome, defensor->nome);
+        defensor->tropas -= 1;
+        printf("\n");
+        
+        if(defensor->tropas < 1){
+            printf("O território %s de cor %s, conquistou o território %s de cor %s", atacante->nome, atacante->cor, defensor->nome, defensor->cor);
+            strcpy(defensor->cor, atacante->cor);
+            printf("\n");
+            printf("Agora o território %s é %s", defensor->nome, defensor->cor);
+        }
+    }else{
+        printf("O %s tirou %d no dado",atacante->nome, dado_atacante);
+        printf("\n");
+        printf("O %s tirou %d no dado", defensor->nome, dado_defensor);
+        printf("\n");
+        printf("O territorio atacante %s perdeu e o territorio %s venceu\n", atacante->nome, defensor->nome);
+        printf("\n");
+    }
+}
 int main() {
     //definindo vetor com base na struct e no tamaho máximo
-    Territorio territorio[quantidade_territorios];
+    Territorio *territorio = (Territorio *)calloc(quantidade_territorios, sizeof(Territorio));
+    int atacante;
+    int defensor;
     printf("JOGO WAR\n");
     
     //percorrendo cada índice para cadastrar o territorio
@@ -126,10 +158,12 @@ int main() {
         //cadastrando com base no índice atual no laço
         printf("Digite o nome do %d° território: ", i + 1);
         fgets(territorio[i].nome, sizeof(territorio[i].nome), stdin);
+        territorio[i].nome[strcspn(territorio[i].nome, "\n")] = '\0';
         printf("\n");
         
         printf("Digite a cor %d° do territorio: ", i + 1);
         fgets(territorio[i].cor, sizeof(territorio[i].cor), stdin);
+        territorio[i].cor[strcspn(territorio[i].cor, "\n")] = '\0';
         printf("\n");
         
         printf("Digite a quantidade de tropas do %d° territorio: ", i + 1);
@@ -138,12 +172,16 @@ int main() {
         
         printf("\n");
     }
-    printf("\n");
-    printf("-----------Lista de Territorios-----------\n");
-    printf("\n");
     
     //percorrendo cada índice cadastrado e printando na tela as informações
-    for (int j = 0; j < quantidade_territorios; j++){
+    
+    do {
+        printf("\n");
+        printf("-----------Lista de Territorios-----------\n");
+        printf("\n");
+        
+        for (int j = 0; j < quantidade_territorios; j++){
+        
         printf("%d° Territorio: \n", j + 1);
         printf("\n");
         printf("Territorio: %s", territorio[j].nome);
@@ -154,9 +192,26 @@ int main() {
         printf("\n");
         printf("--------------------------------------");
         printf("\n");
-    }
-    
-        printf("Encerrando o programa...");
-
+        }
+        
+        printf("Escolha um territorio para atacar (de 1 a %d, ou 0 pra sair): ", quantidade_territorios);
+        scanf("%d", &atacante);
+        getchar();
+        printf("\n");
+        
+        printf("Escolha um territorio para defender (de 1 a %d, ou 0 pra sair): ", quantidade_territorios);
+        scanf("%d", &defensor);
+        getchar();
+        printf("\n");
+          
+        if (atacante < 1 || atacante > quantidade_territorios || defensor < 1 || defensor > quantidade_territorios ||
+        atacante == defensor) {
+        printf("Escolha inválida.\n");
+        }else{  
+             atacar(&territorio[atacante - 1], &territorio[defensor - 1]);
+        }
+    } while(1);
+    printf("\n");
+    printf("Saindo do sistema");
     return 0;
 }
