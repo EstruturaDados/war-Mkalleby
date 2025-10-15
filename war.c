@@ -31,7 +31,7 @@
 
 // --- Função Principal (main) ---
 // Função principal que orquestra o fluxo do jogo, chamando as outras funções em ordem.
-int main() {
+
     // 1. Configuração Inicial (Setup):
     // - Define o locale para português.
     // - Inicializa a semente para geração de números aleatórios com base no tempo atual.
@@ -50,9 +50,6 @@ int main() {
 
     // 3. Limpeza:
     // - Ao final do jogo, libera a memória alocada para o mapa para evitar vazamentos de memória.
-
-    return 0;
-}
 
 // --- Implementação das Funções ---
 
@@ -112,6 +109,40 @@ typedef struct{
 
 //definindo constante para o tamanho máximo de territórios
 #define quantidade_territorios 5
+void listar(Territorio *territorios, int quantidade) {
+    printf("\n-----------Lista de Territórios-----------\n");
+    for (int i = 0; i < quantidade; i++) {
+        printf("%d° Território:\n", i + 1);
+        printf("Nome: %s\n", territorios[i].nome);
+        printf("Cor: %s\n", territorios[i].cor);
+        printf("Tropas: %d\n", territorios[i].tropas);
+        printf("--------------------------------------\n");
+    }
+}
+char cor_missao[10]; // variável global para armazenar a cor da missão
+
+void criarMissao(Territorio *territorios, int quantidade) {
+    srand(time(NULL));
+    int indice = rand() % quantidade;
+    strcpy(cor_missao, territorios[indice].cor);
+
+    printf("\n🔴 Missão criada: Destruir todos os territórios da cor '%s'\n", cor_missao);
+
+    // Verificação imediata da missão
+    int existe = 0;
+    for (int i = 0; i < quantidade; i++) {
+        if (strcmp(territorios[i].cor, cor_missao) == 0 && territorios[i].tropas > 0) {
+            existe = 1;
+            break;
+        }
+    }
+
+    if (!existe) {
+        printf("✅ Missão já está concluída! Nenhum território da cor '%s' possui tropas.\n", cor_missao);
+    } else {
+        printf("⏳ Missão em andamento. Ainda existem territórios da cor '%s' com tropas.\n", cor_missao);
+    }
+}
 void atacar (Territorio *atacante, Territorio *defensor){
     srand(time(NULL));
     
@@ -174,7 +205,7 @@ int main() {
     }
     
     //percorrendo cada índice cadastrado e printando na tela as informações
-    
+    criarMissao(territorio, quantidade_territorios);
     do {
         printf("\n");
         printf("-----------Lista de Territorios-----------\n");
